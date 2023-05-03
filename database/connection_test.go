@@ -2,7 +2,7 @@ package database
 
 import "testing"
 
-func TestSuccessConnectDatabase(t *testing.T) {
+func TestConnectToDatabase(t *testing.T) {
 	// t.Run("Connect to MySQL", func(t *testing.T) {
 	// 	dbms := "mysql"
 	// 	dsn := "user:password@tcp(localhost:3306)/dbname"
