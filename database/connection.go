@@ -27,11 +27,5 @@ func ConnectDB(dbms string, dsn string) (*GORM, error) {
 		return nil, fmt.Errorf("unsupported DBMS: %s", dbms)
 	}
 
-	if err != nil {
-		return nil, err
-	}
-
-	return &GORM{
-		DB: db,
-	}, nil
+	return &GORM{db}, err
 }
