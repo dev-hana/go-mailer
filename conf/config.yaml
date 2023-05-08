@@ -1,0 +1,15 @@
+SWAGGER_HOST:
+SWAGGER_URL:
+
+app:
+    server:
+        port: 8000
+        # false:debugMode, true:releaseMode
+        gin-release: fasle
+    db:
+        dbms: postgres
+        host: localhost
+        port: 5432
+        db: mailer
+        user: postgres
+        password: 1234
