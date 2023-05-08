@@ -9,7 +9,7 @@ import (
 func GetDBConfig() (dbms, dsn string, err error) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./conf")
+	viper.AddConfigPath("../")
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()
@@ -31,7 +31,7 @@ func GetDBConfig() (dbms, dsn string, err error) {
 func GetServerConfig() (bool, int, error) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./conf")
+	viper.AddConfigPath("../")
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()

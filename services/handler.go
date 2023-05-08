@@ -11,9 +11,8 @@ type Handler struct {
 	db database.DBLayer
 }
 
-func NewHandler() (*Handler, error) {
-	dsn := "host=localhost user=postgres password=1234 dbname=mailer port=5432 sslmode=disable TimeZone=Asia/Seoul"
-	db, err := database.ConnectDB("postgres", dsn)
+func NewHandler(dbms, dsn string) (*Handler, error) {
+	db, err := database.ConnectDB(dbms, dsn)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +34,7 @@ func (h *Handler) CheckDBConnection(c *gin.Context) {
 	}
 }
 
-func ResponseBadRequest(c *gin.Context, handler string, err error) {
+func ResponseBadRequest(c *gin.Context, err error) {
 	c.JSON(http.StatusAccepted, gin.H{"httpCode": http.StatusBadRequest, "error": err.Error()})
 	return
 }

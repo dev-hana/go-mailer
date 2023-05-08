@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/dev-hana/go-mailer/conf"
 	"github.com/dev-hana/go-mailer/docs"
 	"github.com/dev-hana/go-mailer/services"
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,21 @@ import (
 )
 
 func RunAPI() error {
+	// Config
+	debug, port, err := conf.GetServerConfig()
+	if err != nil {
+		return err
+	}
+
+	if debug {
+		gin.SetMode(gin.ReleaseMode) //DEFAULT: DebugMode
+	}
+
+	dbms, dsn, err := conf.GetDBConfig()
+	if err != nil {
+		return err
+	}
+
 	r := gin.Default()
 	r.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
@@ -33,13 +49,8 @@ func RunAPI() error {
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "localhost:8000"
 	docs.SwaggerInfo.BasePath = "/v1"
-	h, err := services.NewHandler()
-	if err != nil {
-		return err
-	}
 
-	// INIT - Table 생성
-	err = h.InitTable()
+	h, err := services.NewHandler(dbms, dsn)
 	if err != nil {
 		return err
 	}
@@ -48,9 +59,11 @@ func RunAPI() error {
 	v1Group.Use(h.CheckDBConnection)
 	{
 		v1Group.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+		v1Group.GET("/ping")
 	}
 
-	r.Run(":8000")
+	r.Run(fmt.Sprintf(":%d", port))
 
 	return nil
 }
