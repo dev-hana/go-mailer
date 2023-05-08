@@ -13,3 +13,9 @@ app:
         db: mailer
         user: postgres
         password: 1234
+    smtp:
+        host: host
+        port: 1234
+        user: user
+        password: password
+        vertification: false

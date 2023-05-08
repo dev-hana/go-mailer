@@ -1,7 +1,6 @@
 package conf
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -17,10 +16,19 @@ func TestGetConfig(t *testing.T) {
 	})
 
 	t.Run("get server config", func(t *testing.T) {
-		debug, port, err := GetServerConfig()
+		_, _, err := GetServerConfig()
 		if err != nil {
 			t.Fatal(err.Error())
 		}
-		fmt.Println(debug, port)
+	})
+
+	t.Run("get smtp config", func(t *testing.T) {
+		smtp, err := GetSMTPConfig()
+		if err != nil {
+			t.Fatal(err.Error())
+		}
+		if smtp == nil {
+			t.Fatal("smtp info was nil")
+		}
 	})
 }

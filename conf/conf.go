@@ -45,3 +45,38 @@ func GetServerConfig() (bool, int, error) {
 	return debug, port, nil
 
 }
+
+type SMTPConfig struct {
+	Host         string
+	Port         int
+	User         string
+	Password     string
+	Verification bool
+}
+
+func GetSMTPConfig() (*SMTPConfig, error) {
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("../")
+	viper.AutomaticEnv()
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Println("fatal error config file: default \n", err)
+		return nil, err
+	}
+
+	host := viper.GetString("app.smtp.host")
+	port := viper.GetInt("app.smtp.port")
+	user := viper.GetString("app.smtp.user")
+	password := viper.GetString("app.smtp.password")
+	vertification := viper.GetBool("app.smtp.vertification")
+
+	return &SMTPConfig{
+		Host:         host,
+		Port:         port,
+		User:         user,
+		Password:     password,
+		Verification: vertification,
+	}, nil
+}

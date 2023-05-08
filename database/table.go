@@ -49,20 +49,20 @@ func (SendMail) TableName() string {
 	return "send_mail_tb"
 }
 
-type SMTP struct {
-	gorm.Model
-	Host          string    `gorm:"not null column:host"`
-	Port          int       `gorm:"not null column:port"`
-	User          string    `gorm:"not null column:user"`
-	Password      string    `gorm:"not null column:password"`
-	Vertification bool      `gorm:"not null default:false column:vertification"`
-	CreatedAt     time.Time `gorm:"default:now()" column:"created_at"`
-}
+// type SMTP struct {
+// 	gorm.Model
+// 	Host          string    `gorm:"not null column:host"`
+// 	Port          int       `gorm:"not null column:port"`
+// 	User          string    `gorm:"not null column:user"`
+// 	Password      string    `gorm:"not null column:password"`
+// 	Vertification bool      `gorm:"not null default:false column:vertification"`
+// 	CreatedAt     time.Time `gorm:"default:now()" column:"created_at"`
+// }
 
-func (SMTP) TableName() string {
-	return "smtp_tb"
-}
+// func (SMTP) TableName() string {
+// 	return "smtp_tb"
+// }
 
 func (db *GORM) InitTable() error {
-	return db.AutoMigrate(&SendMail{}, &Project{}, &Template{}, &SMTP{})
+	return db.AutoMigrate(&SendMail{}, &Project{}, &Template{} /*&SMTP{}*/)
 }
