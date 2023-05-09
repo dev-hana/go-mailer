@@ -16,7 +16,7 @@ func TestGetConfig(t *testing.T) {
 	})
 
 	t.Run("get server config", func(t *testing.T) {
-		_, _, err := GetServerConfig()
+		_, _, _, err := GetServerConfig()
 		if err != nil {
 			t.Fatal(err.Error())
 		}

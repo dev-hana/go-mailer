@@ -1,15 +1,12 @@
 package database
 
 import (
+	"fmt"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Project struct {
-	gorm.Model
-	ID          uint64    `gorm:"primaryKey;autoIncrement column:id"`
-	Name        string    `gorm:"not null column:name"`
+	Name        string    `gorm:"primaryKey;autoIncrement:false column:name"`
 	Description string    `gorm:"column:description"`
 	CreatedAt   time.Time `gorm:"default:now()"`
 }
@@ -19,14 +16,12 @@ func (Project) TableName() string {
 }
 
 type Template struct {
-	gorm.Model
-	ID        uint64    `gorm:"primaryKey;autoIncrement column:id"`
-	Title     string    `gorm:"not null column:title"`
-	Header    string    `gorm:"column:header"`
-	Footer    string    `gorm:"column:footer"`
-	ProjectID uint64    `gorm:"column:project_id"`
-	Project   Project   `gorm:"foreignkey:ProjectID"`
-	CreatedAt time.Time `gorm:"default:now()"`
+	Title       string    `gorm:"primaryKey;autoIncrement:false column:title"`
+	Header      string    `gorm:"column:header"`
+	Footer      string    `gorm:"column:footer"`
+	ProjectName string    `gorm:"column:project_name"`
+	Project     Project   `gorm:"foreignkey:ProjectName;references:Name"`
+	CreatedAt   time.Time `gorm:"default:now()"`
 }
 
 func (Template) TableName() string {
@@ -34,14 +29,13 @@ func (Template) TableName() string {
 }
 
 type SendMail struct {
-	gorm.Model
 	ID            uint64    `gorm:"primaryKey;autoIncrement column:id"`
 	Status        bool      `gorm:"not null default:false column:status"`
 	ReceiverName  string    `gorm:"column:receiver_name"`
 	ReceiverEmail string    `gorm:"not null column:receiver_email"`
 	Content       string    `gorm:"not null column:content"`
-	TemplateID    uint64    `gorm:"column:tempalte_id"`
-	Template      Template  `gorm:"foreignkey:TemplateID"`
+	TemplateTitle string    `gorm:"column:tempalte_title"`
+	Template      Template  `gorm:"foreignkey:TemplateTitle;references:Title"`
 	CreatedAt     time.Time `gorm:"default:now()"`
 }
 
@@ -49,20 +43,45 @@ func (SendMail) TableName() string {
 	return "send_mail_tb"
 }
 
-// type SMTP struct {
-// 	gorm.Model
-// 	Host          string    `gorm:"not null column:host"`
-// 	Port          int       `gorm:"not null column:port"`
-// 	User          string    `gorm:"not null column:user"`
-// 	Password      string    `gorm:"not null column:password"`
-// 	Vertification bool      `gorm:"not null default:false column:vertification"`
-// 	CreatedAt     time.Time `gorm:"default:now()" column:"created_at"`
-// }
-
-// func (SMTP) TableName() string {
-// 	return "smtp_tb"
-// }
-
 func (db *GORM) InitTable() error {
-	return db.AutoMigrate(&SendMail{}, &Project{}, &Template{} /*&SMTP{}*/)
+	// drop table when exists
+	err := db.Migrator().DropTable("send_mail_tb", "template_tb", "project_tb")
+	if err != nil {
+		return err
+	}
+
+	// create table
+	err = db.AutoMigrate(&SendMail{}, &Template{}, &Project{})
+	if err != nil {
+		return err
+	}
+
+	tx := db.Begin()
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		} else {
+			tx.Commit()
+			fmt.Println("Init DB!!")
+		}
+	}()
+
+	// insert example project
+	example := Project{
+		Name: "example",
+	}
+	err = tx.Select("name").Create(&example).Error
+	if err != nil {
+		return err
+	}
+
+	// insert example template
+	template := Template{
+		Title:       "회원가입 인증코드 발송",
+		Header:      `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html></head><body>`,
+		Footer:      `</body></html>`,
+		ProjectName: example.Name,
+	}
+	err = tx.Select("title", "header", "footer", "project_name").Create(&template).Error
+	return err
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Fiesta auth</title>
+	
+	<style>
+		@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+		@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+		* { 
+			font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+		}
+		*{
+			padding: 0;
+			margin: 0;
+		}
+	</style>
+</head>
+
+
+<body style="background-color: #EFEDFA;">
+	<table style="background-color: #fff;width:640px;margin : auto;margin-top: 30px;margin-bottom: 30px">
+		<tr>
+			<td colspan="2" align="left" style="font-family: Pretendard;font-size: 28px;font-weight: 500;font-stretch: normal;font-style: normal;line-height: 1.43;letter-spacing: -0.56px;text-align: left;color: #2d2d2d;padding-bottom: 63px;padding-left: 48px">
+				회원가입을 위해<br/>
+				아래의 인증번호를 입력해주세요.<br/>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="left" style="font-family: Pretendard;font-size: 18px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: -0.36px;color: #2d2d2d;padding-bottom: 12px;padding-left: 48px">
+				인증번호
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="left" style="font-family: Roboto;font-size: 34px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: 0.68px;color: #654ffc;padding-left: 48px">
+				{{.AuthCode}}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="left" style="font-family: Pretendard;font-size: 16px;font-weight: normal;font-stretch: normal;font-style: normal;line-height: 1.56;letter-spacing: -0.32px;text-align: left;color: #2d2d2d;padding-top: 12px;padding-bottom: 90px;padding-left: 48px">
+				개인정보 보호를 위해 인증번호는 5분간 유효합니다.
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="left" style="font-family: Pretendard;font-size: 14px;font-weight: normal;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;color: #2d2d2d;padding-bottom: 12px;padding-left: 48px">
+				본 메일은 발신전용 입니다.
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="">
+				<hr style="border-color: #654ffc;opacity: 0.17;">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="font-family: Pretendard;font-size: 13px;font-weight: normal;font-stretch: normal;font-style: normal;line-height: 1.54;letter-spacing: -0.26px;text-align: left;color: #2d2d2d;padding: 32px 48px 48px;">
+				Copyright dev-hana. All right reserved.
+                <a href="https://github.com/dev-hana/go-mailer" style="color: #654ffc;">github</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -2,6 +2,7 @@ package routers
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/dev-hana/go-mailer/conf"
@@ -14,12 +15,12 @@ import (
 
 func RunAPI() error {
 	// Config
-	debug, port, err := conf.GetServerConfig()
+	port, mode, dbInit, err := conf.GetServerConfig()
 	if err != nil {
 		return err
 	}
 
-	if debug {
+	if mode {
 		gin.SetMode(gin.ReleaseMode) //DEFAULT: DebugMode
 	}
 
@@ -55,12 +56,20 @@ func RunAPI() error {
 		return err
 	}
 
+	if dbInit {
+		if err := h.InitTable(); err != nil {
+			return err
+		}
+	}
+
 	v1Group := r.Group("/v1")
 	v1Group.Use(h.CheckDBConnection)
 	{
 		v1Group.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-		v1Group.GET("/ping")
+		v1Group.GET("/ping", func(c *gin.Context) {
+			c.JSON(http.StatusOK, nil)
+		})
 	}
 
 	r.Run(fmt.Sprintf(":%d", port))

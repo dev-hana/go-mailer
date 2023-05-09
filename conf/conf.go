@@ -28,21 +28,22 @@ func GetDBConfig() (dbms, dsn string, err error) {
 	return dbms, fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Seoul", host, user, password, db, port), nil
 }
 
-func GetServerConfig() (bool, int, error) {
+func GetServerConfig() (port int, mode bool, dbInit bool, err error) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("../")
 	viper.AutomaticEnv()
 
-	err := viper.ReadInConfig()
+	err = viper.ReadInConfig()
 	if err != nil {
 		fmt.Println("fatal error config file: default \n", err)
-		return false, 0, err
+		return 0, false, false, err
 	}
 
-	debug := viper.GetBool("app.server.gin-release")
-	port := viper.GetInt("app.server.port")
-	return debug, port, nil
+	port = viper.GetInt("app.server.port")
+	mode = viper.GetBool("app.server.gin-release")
+	dbInit = viper.GetBool("app.server.db-init")
+	return port, mode, dbInit, nil
 
 }
 

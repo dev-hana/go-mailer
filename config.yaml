@@ -6,6 +6,10 @@ app:
         port: 8000
         # false:debugMode, true:releaseMode
         gin-release: fasle
+        # false:do not init DB, true:do init DB
+        # If you already have tables and values
+        # you do not need to initialize them.
+        db-init: true
     db:
         dbms: postgres
         host: localhost
