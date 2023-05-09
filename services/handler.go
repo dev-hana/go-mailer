@@ -41,7 +41,7 @@ func (h *Handler) CheckServerConnection(c *gin.Context) {
 		return
 	}
 
-	if h.smtp == nil {
+	if h.smtp == nil || h.smtp.CheckSMTPConnection() != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "server SMTP error"})
 		return
 	}

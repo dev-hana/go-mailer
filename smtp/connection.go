@@ -9,6 +9,13 @@ type SMTP struct {
 	*gomail.Dialer
 }
 
+func (smtp *SMTP) CheckSMTPConnection() error {
+	if _, err := smtp.Dial(); err != nil {
+		return err
+	}
+	return nil
+}
+
 func ConnectSMTP() (*SMTP, error) {
 	smtp, err := conf.GetSMTPConfig()
 	if err != nil {
