@@ -16,6 +16,10 @@ func ConnectSMTP() (*SMTP, error) {
 	}
 
 	dialer := gomail.NewDialer(smtp.Host, smtp.Port, smtp.User, smtp.Password)
+	if _, err := dialer.Dial(); err != nil {
+		return nil, err
+	}
+
 	return &SMTP{
 		Dialer: dialer,
 	}, nil
