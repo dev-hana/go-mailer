@@ -2,7 +2,6 @@ package routers
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/dev-hana/go-mailer/conf"
@@ -67,9 +66,7 @@ func RunAPI() error {
 	{
 		v1Group.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-		v1Group.GET("/ping", func(c *gin.Context) {
-			c.JSON(http.StatusOK, nil)
-		})
+		v1Group.GET("/ping", h.CheckPing)
 	}
 
 	r.Run(fmt.Sprintf(":%d", port))
