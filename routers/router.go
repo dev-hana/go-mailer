@@ -63,7 +63,7 @@ func RunAPI() error {
 	}
 
 	v1Group := r.Group("/v1")
-	v1Group.Use(h.CheckDBConnection)
+	v1Group.Use(h.CheckServerConnection)
 	{
 		v1Group.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
