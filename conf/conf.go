@@ -81,3 +81,17 @@ func GetSMTPConfig() (*SMTPConfig, error) {
 		Verification: vertification,
 	}, nil
 }
+
+func GetSchedulerConfig() (int, error) {
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("../")
+	viper.AutomaticEnv()
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Println("fatal error config file: default \n", err)
+		return 0, err
+	}
+	return viper.GetInt("app.scheduler.time-second"), nil
+}

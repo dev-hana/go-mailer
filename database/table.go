@@ -17,6 +17,7 @@ func (Project) TableName() string {
 
 type Template struct {
 	Title       string    `gorm:"primaryKey;autoIncrement:false column:title"`
+	Subject     string    `gorm:"column:subject"`
 	Header      string    `gorm:"column:header"`
 	Footer      string    `gorm:"column:footer"`
 	ProjectName string    `gorm:"column:project_name"`
@@ -77,7 +78,8 @@ func (db *GORM) InitTable() error {
 
 	// insert example template
 	template := Template{
-		Title:       "회원가입 인증코드 발송",
+		Title:       "example",
+		Subject:     "회원가입 인증코드 발송",
 		Header:      `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html></head><body>`,
 		Footer:      `</body></html>`,
 		ProjectName: example.Name,
